@@ -1,51 +1,32 @@
 package tests;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import io.qameta.allure.selenide.AllureSelenide;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pageObjects.TopMenuPage;
 
-import static com.codeborne.selenide.Selenide.*;
 
 
-public class CorrectLoginTests {
-    @BeforeClass
-    static void setupAllureReports() {
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
+public class CorrectLoginTests extends TestBase {
 
-        // or for fine-tuning:
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide()
-                .screenshots(false)
-                .savePageSource(true)
-        );
-    }
-
-    @BeforeMethod
-    public void beforeTest() {
-        Configuration.browser = "edge";
-    }
 
     @Test
     @Description("Test poprawnego logowania")
     @Severity(SeverityLevel.BLOCKER)
     public void correctLoginTest() {
-        open("https://www.morele.net/");
+
         TopMenuPage topMenuPage = new TopMenuPage();
         topMenuPage
-                .clickOnLoginButton()
+                .clickOnLoginButtonInTopMenu()
                 .typeEmailIntoUserEmailField("otua.tamotua@op.pl")
                 .typePasswordIntoPasswordField("TestyME123$")
-                .clikOnLoginButton()
+                .clickOnLoginButton()
                 .assertThatLoginButtonChangeNameAfterCorrectLogin("Witaj");
     }
 
     @Test
+    @Description("Test poprawnego logowania i wylogowania się")
     public void correctLoginAndLogoutTest() {
         correctLoginTest();
         TopMenuPage topMenuPage = new TopMenuPage();
